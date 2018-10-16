@@ -38,14 +38,19 @@ Implements
 from domogik.xpl.common.xplconnector import Listener
 from domogik.xpl.common.plugin import XplPlugin
 from domogik.xpl.common.xplmessage import XplMessage
-from domogik.xpl.common.queryconfig import Query
-from domogik_packages.xpl.lib.ipx800 import IPXException
-from domogik_packages.xpl.lib.ipx800 import IPX
+#from domogik.xpl.common.queryconfig import Query
+
+from domogik.common.plugin import Plugin
+from domogikmq.message import MQMessage
+
+
+from domogik_packages.plugin_ipx800.lib.ipx800 import IPXException
+from domogik_packages.plugin_ipx800.lib.ipx800 import IPX
 import threading
 import traceback
 
 
-class IPXManager(XplPlugin):
+class IPXManager(Plugin):
     """ Implements a listener for IPX command messages 
         and launch background listening for relay board status
     """
@@ -53,44 +58,52 @@ class IPXManager(XplPlugin):
     def __init__(self):
         """ Create lister and launch bg listening
         """
-        XplPlugin.__init__(self, name = 'ipx800')
+	Plugin.__init__(self, name='ipx800')
 
-        # Configuration : list of IPX800
+	# check if the plugin is configured. If not, this will stop the plugin and log an error
+        if not self.check_configured():
+            return
+
+	# get the devices, sensors and command lists
+        self.devices = self.get_device_list(quit_if_no_device=True)
+        self.sensors = self.get_sensors(self.devices)
+        self.commands = self.get_commands(self.devices)
+
         self.ipx_list = {}
-        num = 1
-        loop = True
-        self._config = Query(self.myxpl, self.log)
-        while loop == True:
-            model = self._config.query('ipx800', 'model-%s' % str(num))
-            login = self._config.query('ipx800', 'login-%s' % str(num))
-            password = self._config.query('ipx800', 'password-%s' % str(num))
-            name = self._config.query('ipx800', 'name-%s' % str(num))
-            address = self._config.query('ipx800', 'ip-%s' % str(num))
-            inter = self._config.query('ipx800', 'int-%s' % str(num))
-            if name != None:
-                self.log.info("Configuration : login=%s, password=***, name=%s, ip=%s, interval=%s" % 
-                               (login, name, address, inter))
-                self.ipx_list[name] = {"login" : login,
-                                       "password" : password,
-                                       "model" : model,
-                                       "ip" : address,
-                                       "interval" : float(inter)}
-                num += 1
-            else:
-                loop = False
-
-        # no ipx configured
-        if num == 1:
+	for a_device in self.devices:
+            # get config keys for devices
+            device_id = a_device["id"]
+            device_name = a_device["name"]
+            device_type = a_device["device_type_id"]
+	    if device_type == "relayboard":
+	        device_model =  self.get_parameter(a_device, "model")
+	        device_login =  self.get_parameter(a_device, "login")
+	        device_password =  self.get_parameter(a_device, "password")
+	        device_ip =  self.get_parameter(a_device, "ip")
+	        device_int =  self.get_parameter(a_device, "int")
+		self.ipx_list.update({device_name : {'id': device_id, 'model': device_model, 'login' : device_login, 'password' : device_password, 'ip' : device_ip, 'int' : device_int}})
+	if not self.ipx_list:
+	    quit_if_no_device=True
             msg = "No ipx800 board configured. Exiting plugin"
             self.log.info(msg)
             print(msg)
             self.force_leave()
             return
+        #loop = True
+	# get the devices, sensors and command lists
+        #self._config = Query(self.myxpl, self.log)
+        #while loop == True:
+        #model = self._config.query('ipx800', 'model-%s' % str(num))
+        #login = self._config.query('ipx800', 'login-%s' % str(num))
+        #password = self._config.query('ipx800', 'password-%s' % str(num))
+        #name = self._config.query('ipx800', 'name-%s' % str(num))
+        #address = self._config.query('ipx800', 'ip-%s' % str(num))
+        #inter = self._config.query('ipx800', 'int-%s' % str(num))
 
         ### Create IPX objects
         num_ok = 0
         for ipx in self.ipx_list:
-            self.ipx_list[ipx]['obj'] = IPX(self.log, self.send_xpl, self.get_stop())
+            self.ipx_list[ipx]['obj'] = IPX(self.log, self.send_pub_data, self.get_stop())
             try:
                 self.log.info("Opening IPX800 named '%s' (ip : %s)" % 
                                (ipx, self.ipx_list[ipx]['ip']))
@@ -155,6 +168,21 @@ class IPXManager(XplPlugin):
             msg.add_data({'type' :  msg_type})
         msg.add_data({'current' :  msg_current})
         self.myxpl.send(msg)
+
+    def send_pub_data(self, device_id, value):
+        """ 
+           Send the sensors values over MQ
+        """
+        data = {}
+	data[self.sensors[device_id][sensor]] = value
+        self.log.debug(u"==> Update Sensor {0}:{1} for device id {2} ({3})".format(sensor,valeur,device_id,self.device_list[device_id]["name"]))
+
+        try:
+            self._pub.send_event('client.sensor', data)
+        except:
+            # We ignore the message if some values are not correct
+            self.log.debug(u"Bad MQ message to send. This may happen due to some invalid rainhour data. MQ data is : {0}".format(data))
+            pass
 
 
     def ipx_command(self, message):

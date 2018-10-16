@@ -1,185 +1,159 @@
 {
-    "configuration": [
-        {
-            "default": "False", 
-            "description": "Automatically start plugin at Domogik startup", 
-            "id": "0", 
-            "interface": "no", 
-            "key": "startup-plugin", 
-            "optionnal": "no", 
-            "options": [], 
-            "type": "boolean"
-        }, 
-        {
-            "default": null, 
-            "description": "Ipx800 model", 
-            "id": "1", 
-            "interface": "yes", 
-            "key": "model", 
-            "optionnal": "no", 
-            "options": [
-                "ipx800v1", 
-                "ipx800pro", 
-                "ipx800v2", 
-                "ipx800v3"
-            ], 
-            "type": "enum"
-        }, 
-        {
-            "default": null, 
-            "description": "Name", 
-            "id": "2", 
-            "interface": "yes", 
-            "key": "name", 
-            "optionnal": "no", 
-            "options": [], 
-            "type": "string"
-        }, 
-        {
-            "default": null, 
-            "description": "Ip", 
-            "id": "3", 
-            "interface": "yes", 
-            "key": "ip", 
-            "optionnal": "no", 
-            "options": [], 
-            "type": "string"
-        }, 
-        {
-            "default": null, 
-            "description": "Interval between each poll", 
-            "id": "4", 
-            "interface": "yes", 
-            "key": "int", 
-            "optionnal": "no", 
-            "options": [], 
-            "type": "string"
-        }, 
-        {
-            "default": null, 
-            "description": "HTTP Login", 
-            "id": "5", 
-            "interface": "yes", 
-            "key": "login", 
-            "optionnal": "yes", 
-            "options": [], 
-            "type": "string"
-        }, 
-        {
-            "default": null, 
-            "description": "HTTP Password", 
-            "id": "6", 
-            "interface": "yes", 
-            "key": "password", 
-            "optionnal": "yes", 
-            "options": [], 
-            "type": "password"
-        }
-    ],
-    "xpl_stats": {
-         "get_output": {
-            "name": "blah",
-            "schema": "control.basic",
-            "xplstat_name": "get_level",
-            "parameters": {
-                    "static": [
-                        {
-                            "key": "type",
-                            "value": "output"
-                        }
-                    ],
-                    "device": [],
-                    "dynamic": [
-                    ]
-                }
-         }
-    },
-    "xpl_commands": {
-         "send_command": {
-            "name": "blah",
-            "schema": "control.basic",
-            "xplstat_name": "get_level",
-            "parameters": {
-                    "static": [
-                        {
-                            "key": "type",
-                            "value": "output"
-                        }
-                    ],
-                    "device": []
-                }
-         },
-         "send_pulse": {
-            "name": "blah",
-            "schema": "control.basic",
-            "xplstat_name": "get_level",
-            "parameters": {
-                    "static": [
-                        {
-                            "key": "type",
-                            "value": "output"
-                        },
-                        {
-                            "key": "command",
-                            "value": "pulse"
-                        }
-                    ],
-                    "device": []
-                }
-         }
- 
-    },
+    "configuration": [],
+    "xpl_commands": {},
+    "xpl_stats": {},
     "commands": {
        "switch": {
            "name": "Switch On or Off",
            "return_confirmation": true,
-           "params": [
+           "parameters": [
                {
                    "key": "current",
-                   "value_type": "binary",
-                   "values": ["low", "high"]
+	 	   "data_type": "DT_Switch",
+		   "conversion" : ""
                }
-           ],
-           "xpl_command": "send_command"
+           ]
         },
         "pulse": {
            "name": "Set to a level",
            "return_confirmation": true,
-           "params": [],
-           "xpl_command": "send_pulse"
+           "parameters": []
         }
     },
     "sensors": {
         "state": {
                 "name": "state",
-                "unit": "",
-                "value_type": "binary",
-                "values": ["Low", "High"]
+	 	"data_type": "DT_Binary",
+		"conversion" : "",
+		"incremental" : "false",
+		"timeout": 0,
+            	"history": {
+                	"store": true,
+                	"duplicate": false,
+                	"max" :1,
+                	"expire": 0,
+                	"round_value": 0
+			}
+        },
+        "input": {
+                "name": "input",
+	 	"data_type": "DT_Binary",
+		"conversion" : "",
+		"incremental" : "false",
+		"timeout": 0,
+            	"history": {
+                	"store": true,
+                	"duplicate": false,
+                	"max" :1,
+                	"expire": 0,
+                	"round_value": 0
+			}
         },
         "voltage": {
                 "name": "voltage",
-                "unit": "V",
-                "value_type": "number",
-                "values": [0, 100]
+	 	"data_type": "DT_Binary",
+		"conversion" : "",
+		"incremental" : "false",
+		"timeout": 0,
+            	"history": {
+                	"store": true,
+                	"duplicate": false,
+                	"max" :1,
+                	"expire": 0,
+                	"round_value": 0
+			}
         },
         "count": {
                 "name": "count",
-                "unit": "%",
-                "value_type": "integer"
-        }
+	 	"data_type": "DT_Binary",
+		"conversion" : "",
+		"incremental" : "false",
+		"timeout": 0,
+            	"history": {
+                	"store": true,
+                	"duplicate": false,
+                	"max" :1,
+                	"expire": 0,
+                	"round_value": 0
+			}
+    }
     },
     "device_types": {
+        "relayboard": {
+            "description": "Relayboard", 
+            "id": "relayboard", 
+            "name": "RelayBoard",
+            "commands": [],
+            "sensors": [],
+            "parameters": [
+            	{
+	    		"default": null,
+            		"key": "model",
+            		"description": "Ipx800 model",
+		        "xpl": false,
+            		"type": "choice",
+                        "choices" : {
+                            "ipx800v1" : "ipx800v1",
+                            "ipx800pro" : "ipx800pro",
+                            "ipx800v2" : "ipx800v2",
+                            "ipx800v3" : "ipx800v3"
+                        }
+                },
+		{      
+            		"default": null, 
+            		"description": "Name",
+            		"key": "name",  
+		        "xpl": false,
+            		"type": "string"
+        	},     
+        	{      
+            		"default": null, 
+            		"description": "Ip",
+            		"key": "ip",  
+		        "xpl": false,
+            		"type": "string"
+        	},     
+        	{      
+            		"default": null, 
+            		"description": "Interval between each poll",
+            		"key": "int",  
+		        "xpl": false,
+            		"type": "string"
+        	},     
+        	{      
+            		"default": null, 
+            		"description": "HTTP Login",
+            		"key": "login",  
+		        "xpl": false,
+            		"type": "string"
+        	},     
+        	{      
+            		"default": null, 
+            		"description": "HTTP Password",
+		        "xpl": false,
+            		"key": "password", 
+            		"type": "password"
+        	}
+	    ]
+	},
         "relayboard.relay": {
             "description": "Relay", 
             "id": "relayboard.relay", 
             "name": "Relay",
             "commands": ["switch", "pulse"],
             "sensors": ["state"],
-            "xpl_params": [
+            "parameters": [
+                {
+                    "key": "ipx",
+                    "description": "The ipx name the relay belongs to",
+                    "type": "string",
+		    "xpl": false
+                },
                 {
                     "key": "channel",
                     "description": "The channel number",
                     "type": "integer",
+		    "xpl": false,
                     "max_value": 4,
                     "min_value": 1
                 },
@@ -187,6 +161,7 @@
                     "key": "address",
                     "description": "The decimal address",
                     "type": "integer",
+		    "xpl": false,
                     "max_value": 255,
                     "min_value": 0
                 }
@@ -198,11 +173,18 @@
             "name": "Digital input",
             "sensors": ["state"],
             "commands": [],
-            "xpl_params": [
+            "parameters": [
+                {
+                    "key": "ipx",
+                    "description": "The ipx name the digital input belongs to",
+                    "type": "string",
+		    "xpl": false
+                },
                 {
                     "key": "channel",
                     "description": "The channel number",
                     "type": "integer",
+		    "xpl": false,
                     "max_value": 4,
                     "min_value": 1
                 },
@@ -210,6 +192,7 @@
                     "key": "address",
                     "description": "The decimal address",
                     "type": "integer",
+		    "xpl": false,
                     "max_value": 255,
                     "min_value": 0
                 }
@@ -221,11 +204,18 @@
             "name": "Analog input",
             "sensors": ["input"],
             "commands": [],
-            "xpl_params": [
+            "parameters": [
+                {
+                    "key": "ipx",
+                    "description": "The ipx name the analog input belongs to",
+                    "type": "string",
+		    "xpl": false
+                },
                 {
                     "key": "channel",
                     "description": "The channel number",
                     "type": "integer",
+		    "xpl": false,
                     "max_value": 4,
                     "min_value": 1
                 },
@@ -233,6 +223,7 @@
                     "key": "address",
                     "description": "The decimal address",
                     "type": "integer",
+		    "xpl": false,
                     "max_value": 255,
                     "min_value": 0
                 }
@@ -244,11 +235,18 @@
             "name": "Counter",
             "sensors": ["count"],
             "commands": [],
-            "xpl_params": [
+            "parameters": [
+                {
+                    "key": "ipx",
+                    "description": "The ipx name the counter belongs to",
+                    "type": "string",
+		    "xpl": false
+                },
                 {
                     "key": "channel",
                     "description": "The channel number",
                     "type": "integer",
+		    "xpl": false,
                     "max_value": 4,
                     "min_value": 1
                 },
@@ -256,37 +254,23 @@
                     "key": "address",
                     "description": "The decimal address",
                     "type": "integer",
+		    "xpl": false,
                     "max_value": 255,
                     "min_value": 0
                 }
             ]
         }
     }, 
-    "files": [
-        "src/share/domogik/design/plugin/ipx800/icon.png", 
-        "src/share/domogik/plugins/ipx800.json", 
-        "src/domogik_packages/xpl/bin/ipx800.py", 
-        "src/domogik_packages/xpl/lib/ipx800.py",
-        "src/domogik_packages/xpl/helpers/ipx800.py"
-    ], 
     "identity": {
+        "name": "ipx800", 
         "author": "Fritz", 
         "author_email": "fritz.smh at gmail.com", 
-        "category": "relayboard", 
-        "changelog": "0.2\n- adapt plugin for release 0.2.0\n- add support for ipx800 v3 (new features)\n\n0.1\n- plugin creation", 
         "dependencies": [], 
         "description": "IPX800 relayboard support.\nSupported  models :\n- IPX 800\n- IPX 800 pro\n- IPX 800 v2\n- IPX 800 v3\nSupported features :\n- Relay : set and get state\n- Digital input \n- Analog input", 
-        "documentation": "http://wiki.domogik.org/plugin_ipx800", 
         "domogik_min_version": "0.2.0", 
-        "id": "ipx800", 
         "type": "plugin", 
-        "version": "0.2"
+        "version": "0.2",
+        "tags": "relayboard"
     }, 
-    "json_version": 2, 
-    "technology": {
-        "description": "Relay boards monitoring and controlling", 
-        "id": "relayboard", 
-        "name": "Relay board"
-    }, 
-    "udev-rules": []
+    "json_version": 2
 }

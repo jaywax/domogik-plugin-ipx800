@@ -361,8 +361,9 @@ class IPX:
         if data['elt'] == "count":
             elt_type = 'count'
 
-        print("%s-%s(%s)-%s"  % (device, current, data['value'], elt_type))
-        self._callback(device, current, elt_type)
+        print("device:%s - current:%s - value:%s - elt_type:%s"  % (device, current, data['value'], elt_type))
+	to_send = [current, elt_type]
+        self._callback(device, to_send)
 
 
     def get_status(self, is_first = False):
