@@ -1,4 +1,4 @@
-# Domogik Plugin mprsg6z
+# Domogik Plugin ipx800
 
 ## Purpose
 
