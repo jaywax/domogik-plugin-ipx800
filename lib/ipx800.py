@@ -63,9 +63,10 @@ IPX_BTN_LOW = "down"
 IPX_SUCCESS = "Success!"
 
 
-class IPXException(Exception):
+# -------------------------------------------------------------------------------------------------
+class IpxException(Exception):
     """
-    Ipx exception
+       Ipx exception
     """
 
     def __init__(self, value):
@@ -74,6 +75,7 @@ class IPXException(Exception):
     def __str__(self):
         return repr(self.value)
 
+# -------------------------------------------------------------------------------------------------
 
 class IPX:
     """ Library to use IXP800 board
@@ -133,7 +135,7 @@ class IPX:
             error = "Bad ipx800 model : %s. Available list : %s" % (model, IPX800_MODELS)
             print(error)
             self._log.error(error)
-            raise IPXException(error)
+            raise IpxException(error)
         self.model = model
             
         self.name = name
@@ -227,13 +229,13 @@ class IPX:
                      (self.url_status, traceback.format_exc())
             print(error)
             self._log.error(error)
-            raise IPXException(error)
+            raise IpxException(error)
         except HTTPError:
             error = "Error while accessing to '%s' : %s" %  \
                      (self.url_status, traceback.format_exc())
             print(error)
             self._log.error(error)
-            raise IPXException(error)
+            raise IpxException(error)
         res  = resp.read()
         if res[0:8] != IPX_SUCCESS:
             self._log.error("Error while changing 'led%s' to '%s'" % 
@@ -262,7 +264,7 @@ class IPX:
                      (self.url_status, traceback.format_exc())
             print(error)
             self._log.error(error)
-            raise IPXException(error)
+            raise IpxException(error)
         res  = resp.read()
         if res[0:8] != IPX_SUCCESS:
             self._log.error("Error while changing 'led%s' to 'pulse'" % num)
@@ -288,7 +290,7 @@ class IPX:
                      (self.url_status, traceback.format_exc())
             print(error)
             self._log.error(error)
-            raise IPXException(error)
+            raise IpxException(error)
         res  = resp.read()
         if res[0:8] != IPX_SUCCESS:
             self._log.error("Error while reseting 'count%s'" % num)
@@ -380,14 +382,14 @@ class IPX:
                      (self.url_status, traceback.format_exc())
             print(error)
             self._log.error(error)
-            raise IPXException(error)
+            raise IpxException(error)
 
         except:
             error = "Error while accessing to '%s' : %s" % \
                      (self.url_status, traceback.format_exc())
             print(error)
             self._log.error(error)
-            raise IPXException(error)
+            raise IpxException(error)
 
         dom = minidom.parseString(xml)
         response = dom.getElementsByTagName("response")[0]

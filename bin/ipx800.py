@@ -44,7 +44,7 @@ from domogik.common.plugin import Plugin
 from domogikmq.message import MQMessage
 
 
-from domogik_packages.plugin_ipx800.lib.ipx800 import IPXException
+from domogik_packages.plugin_ipx800.lib.ipx800 import IpxException
 from domogik_packages.plugin_ipx800.lib.ipx800 import IPX
 import threading
 import traceback
@@ -135,7 +135,7 @@ class IPXManager(Plugin):
                                               (self.ipx_list[ipx]['interval'],),
                                               {})
                 ipx_listen.start()
-            except IPXException as err:
+            except IpxException as err:
                 self.log.error(err.value)
                 print(err.value)
                 # we don't quit plugin if an error occured
@@ -174,6 +174,7 @@ class IPXManager(Plugin):
            Send the sensors values over MQ
         """
         data = {}
+	print self.sensors,value
 	data[self.sensors[device_id][sensor]] = value
         self.log.debug(u"==> Update Sensor {0}:{1} for device id {2} ({3})".format(sensor,valeur,device_id,self.device_list[device_id]["name"]))
 

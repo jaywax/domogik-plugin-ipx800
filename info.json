@@ -25,7 +25,7 @@
                 "name": "state",
 	 	"data_type": "DT_Binary",
 		"conversion" : "",
-		"incremental" : "false",
+		"incremental" : false,
 		"timeout": 0,
             	"history": {
                 	"store": true,
@@ -39,7 +39,7 @@
                 "name": "input",
 	 	"data_type": "DT_Binary",
 		"conversion" : "",
-		"incremental" : "false",
+		"incremental" : false,
 		"timeout": 0,
             	"history": {
                 	"store": true,
@@ -53,7 +53,7 @@
                 "name": "voltage",
 	 	"data_type": "DT_Binary",
 		"conversion" : "",
-		"incremental" : "false",
+		"incremental" : false,
 		"timeout": 0,
             	"history": {
                 	"store": true,
@@ -67,7 +67,7 @@
                 "name": "count",
 	 	"data_type": "DT_Binary",
 		"conversion" : "",
-		"incremental" : "false",
+		"incremental" : false,
 		"timeout": 0,
             	"history": {
                 	"store": true,
